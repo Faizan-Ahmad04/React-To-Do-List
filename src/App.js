@@ -1,24 +1,53 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import ListHeader from './Components/ListHeader';
+import ListItems from './Components/ListItems';
+
+
 
 function App() {
+  const[inpuList, setInputList] = useState("");
+
+  const[items, setItems] = useState([]);
+
+  // const[removeBtnText, setRemovebtnText] = useState("");
+  
+  const listEvent = (event)=> {
+    setInputList(event.target.value);
+  }
+
+  const addBtnClicked = ()=> {
+      setItems((oldItem) => {
+        return [...oldItem, inpuList]
+      });
+
+      setInputList("");
+      
+  };
+
+  const deleteItems = (id)=> {
+    console.log("deleted");
+
+    setItems((oldItem)=>{
+      return oldItem.filter((arrElem, index)=>{
+        return index!== id;
+      })
+    })
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+ <>
+ <div id='container'>
+  <div className="itemsContainer">
+  <ListHeader listEvent = {listEvent}  addBtnClicked = {addBtnClicked} value={inpuList}/>
+  {
+    items.map((itemval, index)=>{
+      return <ListItems input={itemval} btnText = "x" key ={index} id={index} onSelect={deleteItems}/>
+    })
+  }
+  </div>
+  </div>
+ </>
   );
 }
 
